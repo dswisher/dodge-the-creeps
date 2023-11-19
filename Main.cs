@@ -25,6 +25,8 @@ public partial class Main : Node
     {
         GetNode<Timer>("MobTimer").Stop();
         GetNode<Timer>("ScoreTimer").Stop();
+
+        GetNode<HUD>("HUD").ShowGameOver();
     }
 
 
@@ -38,12 +40,20 @@ public partial class Main : Node
         player.Start(startPosition.Position);
 
         GetNode<Timer>("StartTimer").Start();
+
+        GetTree().CallGroup("mobs", Node.MethodName.QueueFree);
+
+        var hud = GetNode<HUD>("HUD");
+        hud.UpdateScore(_score);
+        hud.ShowMessage("Get Ready!");
     }
 
 
     private void OnScoreTimerTimeout()
     {
         _score += 1;
+
+        GetNode<HUD>("HUD").UpdateScore(_score);
     }
 
 
